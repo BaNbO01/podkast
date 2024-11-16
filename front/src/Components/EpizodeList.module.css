@@ -1,0 +1,31 @@
+.epizodeContainer {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+
+.epizodeList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.epizodaCard {
+  width: calc(33.333% - 20px);
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  color: black;
+  transition: box-shadow 0.3s;
+}
+
+.epizodaCard:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.epizodaDate {
+  font-size: 14px;
+  color: gray;
+}

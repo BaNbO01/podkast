@@ -1,0 +1,46 @@
+.podkastiContainer {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.podkastiList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.podkastCard {
+  width: calc(33.333% - 20px);
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  color: black;
+  transition: box-shadow 0.3s;
+}
+
+.podkastCard:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.podkastBanner {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
