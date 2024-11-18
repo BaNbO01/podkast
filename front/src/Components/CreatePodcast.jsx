@@ -1,23 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import styles from './CreatePodcast.module.css';
+import Navbar from './Navbar';
 
 const CreatePodcast = () => {
-    const [users, setUsers] = useState([]); // Lista korisnika za pretragu
-    const [searchTerm, setSearchTerm] = useState(''); // Filter za username
-    const [selectedUsers, setSelectedUsers] = useState([]); // Lista selektovanih korisnika kao kreatora
+    const [users, setUsers] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [selectedUsers, setSelectedUsers] = useState([]);
     const [podcastName, setPodcastName] = useState('');
     const [description, setDescription] = useState('');
-    const[categoryId,setCategoryId]=useState('');
+    const [categoryId, setCategoryId] = useState('');
     const [categories, setCategories] = useState([]);
-    const [banner, setBanner] = useState(null);// Slika banera
-    const [errors, setErrors] = useState({}); 
+    const [banner, setBanner] = useState(null);
+    const [errors, setErrors] = useState({});
+    const [userRole, setUserRole] = useState('kreator');
 
-    // Fetch korisnici kada se promeni searchTerm
     useEffect(() => {
         if (searchTerm) {
             axios.get(`http://localhost:8000/api/users/search?username=${searchTerm}`)
                 .then(response => {
-                    setUsers(response.data.data); // Postavljanje rezultata pretrage
+                    setUsers(response.data.data);
                 })
                 .catch(error => {
                     console.error('Error fetching users:', error);
@@ -27,50 +29,40 @@ const CreatePodcast = () => {
         }
     }, [searchTerm]);
 
-
-
     useEffect(() => {
         axios.get('http://localhost:8000/api/kategorije')
             .then(response => {
-                setCategories(response.data.data); // Postavi kategorije iz odgovora
+                setCategories(response.data.data);
             })
             .catch(error => {
                 console.error('Error fetching categories:', error);
             });
     }, []);
-    
 
-    // Funkcija za dodavanje kreatora
     const addCreator = (user) => {
         if (!selectedUsers.some(u => u.id === user.id)) {
             setSelectedUsers([...selectedUsers, user]);
         }
     };
 
-    // Funkcija za uklanjanje kreatora
     const removeCreator = (userId) => {
         setSelectedUsers(selectedUsers.filter(user => user.id !== userId));
     };
 
-    // Funkcija za upload banera
     const handleBannerChange = (e) => {
         setBanner(e.target.files[0]);
     };
 
-    // Funkcija za slanje podkasta na server
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        
         const formData = new FormData();
         formData.append('naziv', podcastName);
         formData.append('opis', description);
         formData.append('kategorija_id', categoryId);
         formData.append('baner', banner);
         const creatorIds = selectedUsers.map(user => user.id);
-formData.append('kreatori', JSON.stringify(creatorIds));
-        
-      
+        formData.append('kreatori', JSON.stringify(creatorIds));
 
         try {
             const response = await axios.post('http://localhost:8000/api/podkasti', formData, {
@@ -78,10 +70,9 @@ formData.append('kreatori', JSON.stringify(creatorIds));
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            console.log('Podkast created:', response.data);
-            alert("Podkast uspesno kreiran!");
+            console.log('Podcast created:', response.data);
+            alert("Podcast successfully created!");
             setErrors({});
-            // Možemo preusmeriti ili obavestiti korisnika da je uspešno sačuvano
         } catch (error) {
             console.error('Error saving podcast:', error);
             setErrors(error.response.data.errors);
@@ -89,24 +80,28 @@ formData.append('kreatori', JSON.stringify(creatorIds));
     };
 
     return (
+        <div>
+             <Navbar userRole={userRole} />
+        
         <div className="create-podcast-form">
-            <h2>Create Podcast</h2>
+            <h2>Kreiraj Podkast</h2>
 
             {errors && Object.keys(errors).length > 0 && (
-    <div className="error-dialog">
-        <h3>Validation Errors</h3>
-        <ul>
-            {Object.entries(errors).map(([field, messages]) =>
-                messages.map((message, index) => (
-                    <li key={`${field}-${index}`}>{message}</li>
-                ))
+                <div className="error-dialog">
+                    <h3>Validation Errors</h3>
+                    <ul>
+                        {Object.entries(errors).map(([field, messages]) =>
+                            messages.map((message, index) => (
+                                <li key={`${field}-${index}`}>{message}</li>
+                            ))
+                        )}
+                    </ul>
+                </div>
             )}
-        </ul>
-    </div>
-)}
+
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="podcast-name">Podcast Name</label>
+                <div className="form-group">
+                    <label htmlFor="podcast-name">Naziv Podkasta</label>
                     <input
                         id="podcast-name"
                         type="text"
@@ -116,8 +111,8 @@ formData.append('kreatori', JSON.stringify(creatorIds));
                     />
                 </div>
 
-                <div>
-                    <label htmlFor="description">Description</label>
+                <div className="form-group">
+                    <label htmlFor="description">Opis</label>
                     <textarea
                         id="description"
                         value={description}
@@ -126,26 +121,25 @@ formData.append('kreatori', JSON.stringify(creatorIds));
                     />
                 </div>
 
-                <div>
-                    <label htmlFor="category">Category</label>
+                <div className="form-group">
+                    <label htmlFor="category">Kategorija</label>
                     <select
                         id="category"
                         value={categoryId}
                         onChange={(e) => setCategoryId(e.target.value)}
                         required
                     >
-                        <option value="">Select Category</option>
+                        <option value="">Odaberi Kategoriju</option>
                         {categories.map(category => (
                             <option key={category.id} value={category.id}>
-                                {category.naziv} {/* Prikaz imena kategorije */}
+                                {category.naziv}
                             </option>
                         ))}
                     </select>
-            </div>
+                </div>
 
-
-                <div>
-                    <label htmlFor="banner">Upload Banner</label>
+                <div className="form-group">
+                    <label htmlFor="banner">Postavi Baner</label>
                     <input
                         id="banner"
                         type="file"
@@ -155,46 +149,9 @@ formData.append('kreatori', JSON.stringify(creatorIds));
                     />
                 </div>
 
-                <div>
-                    <label htmlFor="users">Search Users</label>
-                    <input
-                        id="users"
-                        type="text"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        placeholder="Search by username"
-                    />
-                    <ul>
-                        {users.map(user => (
-                            <li key={user.id}>
-                                {user.username}
-                                <button type="button" onClick={() => addCreator(user)}>
-                                    Add as Creator
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-
-                <div>
-                    <label>Selected Creators</label>
-                    <ul>
-                        {selectedUsers.map(user => (
-                            <li key={user.id}>
-                                {user.username}
-                                <button type="button" onClick={() => removeCreator(user.id)}>
-                                    Remove
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-
-                <button type="submit">Save Podcast</button>
+                <button type="submit">Kreiraj Podkast</button>
             </form>
-
-
-           
+        </div>
         </div>
     );
 };

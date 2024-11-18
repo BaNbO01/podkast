@@ -7,7 +7,8 @@ import Navbar from '../Components/Navbar';
 const EpizodaDetalji = () => {
   const { id } = useParams();
   const [epizoda, setEpizoda] = useState(null);
-  const [userRole, setUserRole] = useState('gledalac');
+  const [userRole, setUserRole] = useState('kreator');
+  const [podcastCreatorId, setPodcastCreatorId] = useState(null); // Pretpostavljam da bi ovo trebalo biti u nekoj odgovarajućoj varijabli
 
   useEffect(() => {
     const fetchEpizoda = async () => {
@@ -21,6 +22,13 @@ const EpizodaDetalji = () => {
     };
     fetchEpizoda();
   }, [id]);
+
+  // Pretpostavljam da se ID kreatora podkasta preuzima zajedno sa podacima epizode ili se može dobiti na neki drugi način
+  useEffect(() => {
+    // Ovde treba dodati logiku za preuzimanje ID kreatora podkasta
+    // Na primer, uzimanje iz odgovora podkasta, ili iz lokalnog storage-a, itd.
+    setPodcastCreatorId(1); // Ovaj ID je samo primer
+  }, []);
 
   if (!epizoda) return <div className={styles.loadingMessage}>Učitavanje...</div>;
 
@@ -54,9 +62,21 @@ const EpizodaDetalji = () => {
         <a href={epizoda.fajl.download_url} download className={styles.downloadButton}>
           Preuzmi
         </a>
+
+        {/* Dugme "Obriši Epizodu", koje je vidljivo samo adminu i kreatoru podkasta */}
+        {(userRole === 'administrator' || podcastCreatorId === epizoda.podcast_id) && (
+          <button onClick={() => handleDeleteEpizoda(id)} className={styles.deleteButton}>
+            Obriši Epizodu
+          </button>
+        )}
       </div>
     </div>
   );
+};
+
+// Placeholder za funkciju koja briše epizodu
+const handleDeleteEpizoda = (id) => {
+  console.log('Epizoda sa ID:', id, 'je obrisana');
 };
 
 export default EpizodaDetalji;

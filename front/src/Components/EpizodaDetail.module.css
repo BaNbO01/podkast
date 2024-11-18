@@ -47,6 +47,24 @@
   background-color: #45a049;
 }
 
+.deleteButton {
+  display: inline-block;
+  padding: 12px 20px;
+  background-color: red;
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  margin-left: 20px;
+  text-align: center;
+  transition: background-color 0.3s;
+}
+
+.deleteButton:hover {
+  background-color: darkred;
+}
+
 .loadingMessage {
   font-size: 1.5rem;
   text-align: center;

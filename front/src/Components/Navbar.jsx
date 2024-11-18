@@ -36,7 +36,7 @@ const Navbar = ({ userRole }) => {
       return (
         <>
           <li><Link to="/podkasti" onClick={handleLinkClick}>Podkasti</Link></li>
-          <li><Link to="/omiljeni-podkasti" onClick={handleLinkClick}>Omiljeni Podkasti</Link></li>
+          <li><Link to="/omiljeni" onClick={handleLinkClick}>Omiljeni Podkasti</Link></li>
           <li><Link to="/youtube" onClick={handleLinkClick}>Youtube</Link></li>
         </>
       );

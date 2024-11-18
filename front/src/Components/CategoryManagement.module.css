@@ -1,0 +1,153 @@
+/* Globalna stilizacija */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+h2, h3 {
+    color: #2c3e50;
+}
+
+h2 {
+    font-size: 30px;
+    margin-top: 100px;
+    margin-bottom: 20px;
+}
+
+h3 {
+    font-size: 24px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    color: #3498db;
+}
+
+/* Prikaz grešaka */
+div[style*='color: red'] {
+    background-color: #f2dede;
+    color: #a94442;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+/* Form styling */
+form {
+    background-color: #ffffff;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+form div {
+    display: flex;
+    flex-direction: column;
+}
+
+form label {
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+form input {
+    padding: 12px 15px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    outline: none;
+    transition: all 0.3s ease;
+    background-color: #f7f7f7;
+    margin-bottom: 15px;
+}
+
+form input:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+form button {
+    padding: 12px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background-color: #2980b9;
+}
+
+/* Postojeće Kategorije */
+.listName {
+    list-style-type: none;
+    padding-left: 0;
+    width: 50%;
+    margin: 0 auto;
+}
+
+.listName li {
+    background-color: #ecf0f1;
+    padding: 10px 20px;
+    margin: 10px 0;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.listName li:hover {
+    background-color: #dfe6e9;
+}
+
+.listName li button {
+    background-color: #e74c3c;
+    color: white;
+    font-size: 14px;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.listName li button:hover {
+    background-color: #c0392b;
+}
+
+/* Prikazivanje praznih kategorija */
+p {
+    font-size: 16px;
+    color: #7f8c8d;
+}
+
+/* Dodavanje animacije pri učitavanju */
+.container {
+    max-width: 1000px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
