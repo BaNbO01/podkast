@@ -5,7 +5,7 @@ import './Login.css';
 
 const Login = () => {
   const [userData, setUserData] = useState({
-    username: '',
+    email: '',
     password: '',
   });
   const [errorMessage, setErrorMessage] = useState('');
@@ -21,7 +21,7 @@ const Login = () => {
   // Rukovanje prijavom
   const handleLogin = (e) => {
     e.preventDefault();
-    console.log(userData.username + userData.password);
+    console.log(userData.email + userData.password);
     axios
       .post('http://127.0.0.1:8000/api/login', userData)
       .then((response) => {
@@ -56,10 +56,10 @@ const Login = () => {
         <form onSubmit={handleLogin}>
           <input
             type="text"
-            name="username"
+            name="email"
             placeholder="Korisničko ime"
             className="login-input"
-            value={userData.username}
+            value={userData.email}
             onChange={handleInput}
             required
           />
