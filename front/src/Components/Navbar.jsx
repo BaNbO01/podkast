@@ -1,14 +1,23 @@
 // src/components/Navbar.jsx
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css'; // Stilizacija menija
 
 const Navbar = ({ userRole }) => {
   const [menuOpen, setMenuOpen] = useState(false); // Kontrola za burger meni
+  const navigate = useNavigate();
 
   // Funkcija koja zatvara meni kada je opcija izabrana
   const handleLinkClick = () => {
     setMenuOpen(false); // Zatvori meni kada se klikne na link
+  };
+
+  const handleLogout = () => {
+    // Brišemo sve podatke iz sessionStorage
+    window.sessionStorage.clear();
+
+    // Preusmeravanje na login stranicu
+    navigate('/');
   };
 
   // Kreiranje menija zavisno od uloge
@@ -26,7 +35,7 @@ const Navbar = ({ userRole }) => {
       return (
         <>
           <li><Link to="/podkasti" onClick={handleLinkClick}>Podkasti</Link></li>
-          <li><Link to="/kreiraj-podkast" onClick={handleLinkClick}>Kreiraj Podkast</Link></li>
+          <li><Link to="/kreirajPodkast" onClick={handleLinkClick}>Kreiraj Podkast</Link></li>
           <li><Link to="/moji-podkasti" onClick={handleLinkClick}>Moji Podkasti</Link></li>
           <li><Link to="/youtube" onClick={handleLinkClick}>Youtube</Link></li>
         </>
@@ -57,7 +66,7 @@ const Navbar = ({ userRole }) => {
 
       {/* Logout dugme */}
       <div className="logout">
-        <button>IZLOGUJ SE</button>
+        <button onClick={handleLogout}>IZLOGUJ SE</button>
       </div>
 
       {/* Sidebar koji izlazi na klik burger menija */}

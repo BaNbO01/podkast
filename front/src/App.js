@@ -10,6 +10,8 @@ import Register from './Components/Register';
 import OmiljeniPodkasti  from './Components/Favorites';
 import UserManagement from './Components/UserManagement';
 import CategoryManagement from './Components/CategoryManagement';
+import MojiPodkasti from './Components/MyPodcast';
+import YouTube from './Components/Youtube';
 const App = () => {
   return (
     <Router>
@@ -25,6 +27,8 @@ const App = () => {
           <Route path="/omiljeni" element={<OmiljeniPodkasti />} />
           <Route path="/korisnici" element={<UserManagement />} />
           <Route path="/kategorije" element={<CategoryManagement/>}/>
+          <Route path="/moji-podkasti" element={<MojiPodkasti/>}/>
+          <Route path="/youtube" element={<YouTube/>}/>
         </Routes>
       </div>
     </Router>

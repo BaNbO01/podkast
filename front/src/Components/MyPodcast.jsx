@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import styles from './PodkastiList.module.css';
 import Navbar from '../Components/Navbar';
 
-const PodkastiList = () => {
+const MojiPodkasti = () => {
   const [podkasti, setPodkasti] = useState([]);
   const [filter, setFilter] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -13,21 +13,34 @@ const PodkastiList = () => {
 
   useEffect(() => {
     const role = sessionStorage.getItem('role') || 'gledalac';
+    const authToken = sessionStorage.getItem('auth_token');
     setUserRole(role);
 
-   
+    if (role !== 'kreator') {
+      // Ako korisnik nije kreator, preusmeravanje ili neka poruka
+      console.error('Samo kreator može da pristupi ovoj stranici.');
+      return;
+    }
 
-    const fetchPodkasti = async () => {
-      const response = await axios.get('http://localhost:8000/api/podkasti', {
-        params: {
-          page: currentPage,
-          per_page: itemsPerPage,
-          naziv: filter,
-        },
-      });
-      setPodkasti(response.data.data);
+    const fetchMojiPodkasti = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/api/moji-podkasti', {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+          params: {
+            page: currentPage,
+            per_page: itemsPerPage,
+            naziv: filter,
+          },
+        });
+        setPodkasti(response.data.data);
+      } catch (error) {
+        console.error('Greška pri dohvatanju podkasta:', error);
+      }
     };
-    fetchPodkasti();
+
+    fetchMojiPodkasti();
   }, [currentPage, filter]);
 
   return (
@@ -35,6 +48,7 @@ const PodkastiList = () => {
       <Navbar userRole={userRole} />
 
       <div className={styles.podkastiContainer}>
+        <h2>Moji Podkasti</h2>
         <input
           type="text"
           placeholder="Pretraži podkaste..."
@@ -44,17 +58,15 @@ const PodkastiList = () => {
         />
         <div className={styles.podkastiList}>
           {podkasti.map(podkast => (
-            
             <Link
               to={`/podkasti/${podkast.id}`}
               key={podkast.id}
               className={styles.podkastCard}
               state={{
-                
                 baner: podkast.baner,
                 naziv: podkast.naziv,
                 opis: podkast.opis,
-              }} // Prosleđivanje podataka putem state-a
+              }}
             >
               <img src={podkast.baner} alt={podkast.naziv} className={styles.podkastBanner} />
               <h3>{podkast.naziv}</h3>
@@ -80,4 +92,4 @@ const PodkastiList = () => {
   );
 };
 
-export default PodkastiList;
+export default MojiPodkasti;

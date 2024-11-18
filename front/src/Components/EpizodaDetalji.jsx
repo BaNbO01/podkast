@@ -8,9 +8,13 @@ const EpizodaDetalji = () => {
   const { id } = useParams();
   const [epizoda, setEpizoda] = useState(null);
   const [userRole, setUserRole] = useState('kreator');
-  const [podcastCreatorId, setPodcastCreatorId] = useState(null); // Pretpostavljam da bi ovo trebalo biti u nekoj odgovarajućoj varijabli
+  const [podcastCreatorId, setPodcastCreatorId] = useState(null); 
 
   useEffect(() => {
+    
+    const role = sessionStorage.getItem('role') || 'gledalac'; 
+    setUserRole(role);
+
     const fetchEpizoda = async () => {
       try {
         const response = await axios.get(`http://localhost:8000/api/epizode/${id}`);
@@ -23,10 +27,9 @@ const EpizodaDetalji = () => {
     fetchEpizoda();
   }, [id]);
 
-  // Pretpostavljam da se ID kreatora podkasta preuzima zajedno sa podacima epizode ili se može dobiti na neki drugi način
+ 
   useEffect(() => {
-    // Ovde treba dodati logiku za preuzimanje ID kreatora podkasta
-    // Na primer, uzimanje iz odgovora podkasta, ili iz lokalnog storage-a, itd.
+    
     setPodcastCreatorId(1); // Ovaj ID je samo primer
   }, []);
 
@@ -38,7 +41,6 @@ const EpizodaDetalji = () => {
       <div className={styles.epizodaContainer}>
         <h1 className={styles.epizodaTitle}>{epizoda.naziv}</h1>
 
-        {/* Prikazivanje audio player-a ako je fajl audio */}
         {epizoda.fajl && epizoda.fajl.tip.startsWith('audio') && (
           <div className={styles.audioContainer}>
             <audio controls className={styles.audioPlayer}>

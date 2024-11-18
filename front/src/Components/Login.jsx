@@ -21,7 +21,6 @@ const Login = () => {
   // Rukovanje prijavom
   const handleLogin = (e) => {
     e.preventDefault();
-    console.log(userData.email + userData.password);
     axios
       .post('http://127.0.0.1:8000/api/login', userData)
       .then((response) => {
@@ -33,7 +32,7 @@ const Login = () => {
           // Navigacija nakon uspešne prijave
           navigate('/podkasti', { state: { role: response.data.role } });
         } else {
-          setErrorMessage('Pogrešno korisničko ime ili lozinka.');
+          setErrorMessage('Pogrešan email ili lozinka.');
         }
       })
       .catch((error) => {
@@ -57,7 +56,7 @@ const Login = () => {
           <input
             type="text"
             name="email"
-            placeholder="Korisničko ime"
+            placeholder="Email"
             className="login-input"
             value={userData.email}
             onChange={handleInput}

@@ -15,7 +15,7 @@ const EpizodeList = () => {
   console.log(state?.baner, state?.naziv, state?.opis);
 
   useEffect(() => {
-    const role = localStorage.getItem('user_role') || 'administrator'; // Postavljamo ulogu (administrator, kreator, gledalac)
+    const role = sessionStorage.getItem('role') || 'gledalac'; // Postavljamo ulogu (administrator, kreator, gledalac)
     setUserRole(role);
 
     const userId = localStorage.getItem('user_id');
