@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('opis');
             $table->string('putanja_do_banera');
             $table->foreignId('kategorija_id')->constrained('kategorije')->onDelete('cascade');
+            $table->foreignId('kreator_id')->constrained('users')->onDelete('cascade'); 
             $table->timestamps();
         });
     }

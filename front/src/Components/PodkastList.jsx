@@ -24,6 +24,10 @@ const PodkastiList = () => {
           per_page: itemsPerPage,
           naziv: filter,
         },
+        headers: {
+          'Authorization': "Bearer " + window.sessionStorage.getItem('auth_token'),
+      },
+
       });
       setPodkasti(response.data.data);
     };
@@ -59,7 +63,7 @@ const PodkastiList = () => {
               <img src={podkast.baner} alt={podkast.naziv} className={styles.podkastBanner} />
               <h3>{podkast.naziv}</h3>
               <p>{podkast.opis}</p>
-              <i className="category">Kategorija</i>
+              <i className="category">{podkast.kategorija.naziv}</i>
             </Link>
           ))}
         </div>

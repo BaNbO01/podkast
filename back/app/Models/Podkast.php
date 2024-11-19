@@ -10,11 +10,11 @@ class Podkast extends Model
     protected $table = 'podkasti';
     use HasFactory;
   
-    protected $fillable = ['naziv', 'opis', 'putanja_do_banera', 'kategorija_id'];
+    protected $fillable = ['naziv', 'opis', 'putanja_do_banera','kategorija_id','kreator_id'];
   
-    public function kreatori()
+    public function kreator()
     {
-        return $this->belongsToMany(User::class, 'korisnik_podkast');
+        return $this->belongsTo(User::class, 'kreator_id');
     }
 
     public function kategorija()
@@ -26,5 +26,11 @@ class Podkast extends Model
     {
         return $this->hasMany(Epizoda::class);
     }
+
+
+   
+
+
+
 }
 

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import styles from './PodkastiList.module.css';
 import Navbar from '../Components/Navbar';
 
-const MojiPodkasti = () => {
+const MyPodcast = () => {
   const [podkasti, setPodkasti] = useState([]);
   const [filter, setFilter] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,9 +24,9 @@ const MojiPodkasti = () => {
 
     const fetchMojiPodkasti = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/moji-podkasti', {
+        const response = await axios.get('http://localhost:8000/api/users/podkasti', {
           headers: {
-            Authorization: `Bearer ${authToken}`,
+            'Authorization': `Bearer ${authToken}`,
           },
           params: {
             page: currentPage,
@@ -34,7 +34,7 @@ const MojiPodkasti = () => {
             naziv: filter,
           },
         });
-        setPodkasti(response.data.data);
+        setPodkasti(response.data.data);  // Postavljanje podataka sa servera
       } catch (error) {
         console.error('Greška pri dohvatanju podkasta:', error);
       }
@@ -92,4 +92,4 @@ const MojiPodkasti = () => {
   );
 };
 
-export default MojiPodkasti;
+export default MyPodcast;

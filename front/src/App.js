@@ -11,7 +11,7 @@ import OmiljeniPodkasti  from './Components/Favorites';
 import UserManagement from './Components/UserManagement';
 import CategoryManagement from './Components/CategoryManagement';
 import MojiPodkasti from './Components/MyPodcast';
-import YouTube from './Components/Youtube';
+import YouTubeChannelVideos from './Components/YouTubeChannelVideos';
 const App = () => {
   return (
     <Router>
@@ -23,12 +23,12 @@ const App = () => {
           <Route path="/podkasti" element={<PodkastiList />} />
           <Route path="/podkasti/:id" element={<EpizodeList />} />
           <Route path="/epizode/:id" element={<EpizodaDetalji />} />
-          <Route path="/kreirajEpizodu" element={<NovaEpizodaForm podkastId={11} />} />
+          <Route path="/kreirajEpizodu" element={<NovaEpizodaForm/>} />
           <Route path="/omiljeni" element={<OmiljeniPodkasti />} />
           <Route path="/korisnici" element={<UserManagement />} />
           <Route path="/kategorije" element={<CategoryManagement/>}/>
           <Route path="/moji-podkasti" element={<MojiPodkasti/>}/>
-          <Route path="/youtube" element={<YouTube/>}/>
+          <Route path="/youtube" element={<YouTubeChannelVideos/>}/>
         </Routes>
       </div>
     </Router>

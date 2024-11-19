@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 use App\Http\Resources\PodkastResource;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+
+
 class PodkastController extends Controller
 {
     public function index(Request $request)
@@ -44,31 +48,42 @@ class PodkastController extends Controller
     public function store(Request $request)
     {
      
-        Log::info($request->kreatori);
+        try{
+            $request->validate([
+                'naziv' => 'required|string',
+                'opis' => 'required|string',
+                'kategorija_id' => 'required|exists:kategorije,id',
+                'baner' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', 
+              
+                
+            ]);
+    
+            $user = Auth::user();
+    
+            $podkast = Podkast::create([
+                'naziv' => $request->naziv,
+                'opis' => $request->opis,
+                'kategorija_id' => $request->kategorija_id,
+                'putanja_do_banera' => $this->uploadBaner($request->file('baner'), $request->naziv), // Poziv za upload slike banera
+                'kreator_id'=>$user->id,
+            ]);
+    
+    
+           
+    
+          
+    
+            return response()->json(['message' => 'Podkast je uspešno sačuvan', 'podkast' => $podkast], 201);
+        }
+        catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Greška prilikom ažuriranja aukcije',
+                'error' => $e->getMessage()
+            ], 500);
+        }
         
         // Validacija podataka
-        $request->validate([
-            'naziv' => 'required|string',
-            'opis' => 'required|string',
-            'kategorija_id' => 'required|exists:kategorije,id',
-            'baner' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', 
-            'kreatori'=>'required' 
-            
-        ]);
-
-        
-        $podkast = Podkast::create([
-            'naziv' => $request->naziv,
-            'opis' => $request->opis,
-            'kategorija_id' => $request->kategorija_id,
-            'putanja_do_banera' => $this->uploadBaner($request->file('baner'), $request->naziv), // Poziv za upload slike banera
-        ]);
-
-
-        $kreatoriIds = json_decode($request->kreatori);
-        $podkast->kreatori()->attach($request->kreatoriIds);
-
-        return response()->json(['message' => 'Podkast je uspešno sačuvan', 'podkast' => $podkast], 201);
+       
     }
 
     // Funkcija za upload banera
@@ -80,7 +95,7 @@ class PodkastController extends Controller
         $filename = $sanitizedNaziv . '.' . $extension;
 
         // Putanja gde će se sačuvati slika
-        $path = 'storage/' . $sanitizedNaziv;
+        $path = 'public/app/' . $sanitizedNaziv;
 
         // Proverava da li direktorijum postoji, ako ne, pravi ga
         if (!Storage::exists($path)) {
@@ -90,9 +105,66 @@ class PodkastController extends Controller
         // Sprema sliku na specifičnu putanju
         $pathFile = $file->storeAs($path, $filename);
 
-        return $pathFile; // Vraća putanju do banera
+        return str_replace('public/', 'storage/', $pathFile); // Vraća putanju do banera
     }
 
+
+
+
+    public function destroy($id)
+{
+    try {
+        // Pronađi podkast
+        $podkast = Podkast::findOrFail($id);
+
+        // Pronađi baner podkasta i obriši fajl
+        if ($podkast->putanja_do_banera) {
+            $putanjaBanera = public_path($podkast->putanja_do_banera);
+            Log::info($putanjaBanera);
+            
+            // Ukloni 'storage/app'
+            $putanja = str_replace('/', '\\', $putanjaBanera); 
+            Log::info($putanja);
+
+            $direktorijum = dirname($putanja);
+            Log::info($direktorijum);
+            if (File::exists($direktorijum)) {
+                File::deleteDirectory($direktorijum);
+            }
+        }
+
+        // Obriši sve epizode povezane sa podkastom koristeći Eloquent relaciju
+        $podkast->epizode->each(function ($epizoda) {
+            // Pronađi fajl vezan za svaku epizodu i obriši
+            if ($epizoda->fajl) {
+                $putanjaFajla = public_path($epizoda->fajl->putanja);
+                Log::info($putanjaFajla);
+                $putanja = str_replace('/', '\\', $putanjaFajla);
+                Log::info($putanja);
+
+                $direktorijum = dirname($putanja);
+                Log::info($direktorijum);
+                if (File::exists($direktorijum)) {
+                    File::deleteDirectory($direktorijum);
+                }
+
+                // Takođe, obriši fajl iz baze
+                $epizoda->fajl->delete();
+            }
+
+            // Obriši epizodu
+            $epizoda->delete();
+        });
+
+        // Na kraju obriši podkast
+        $podkast->delete();
+
+        return response()->json(['message' => 'Podkast i sve njegove epizode su uspešno obrisani.'], 200);
+    } catch (\Exception $e) {
+        Log::error('Greška prilikom brisanja podkasta: ' . $e->getMessage());
+        return response()->json(['message' => 'Došlo je do greške prilikom brisanja podkasta.'], 500);
+    }
+}
 
 
 

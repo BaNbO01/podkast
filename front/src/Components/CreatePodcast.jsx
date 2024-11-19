@@ -4,9 +4,7 @@ import styles from './CreatePodcast.module.css';
 import Navbar from './Navbar';
 
 const CreatePodcast = () => {
-    const [users, setUsers] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [selectedUsers, setSelectedUsers] = useState([]);
+
     const [podcastName, setPodcastName] = useState('');
     const [description, setDescription] = useState('');
     const [categoryId, setCategoryId] = useState('');
@@ -15,22 +13,14 @@ const CreatePodcast = () => {
     const [errors, setErrors] = useState({});
     const [userRole, setUserRole] = useState('kreator');
 
-    useEffect(() => {
-        if (searchTerm) {
-            axios.get(`http://localhost:8000/api/users/search?username=${searchTerm}`)
-                .then(response => {
-                    setUsers(response.data.data);
-                })
-                .catch(error => {
-                    console.error('Error fetching users:', error);
-                });
-        } else {
-            setUsers([]);
-        }
-    }, [searchTerm]);
+
 
     useEffect(() => {
-        axios.get('http://localhost:8000/api/kategorije')
+        axios.get('http://localhost:8000/api/kategorije',{
+            headers: {
+                'Authorization': "Bearer " + window.sessionStorage.getItem('auth_token'),
+            },
+        })
             .then(response => {
                 setCategories(response.data.data);
             })
@@ -39,16 +29,7 @@ const CreatePodcast = () => {
             });
     }, []);
 
-    const addCreator = (user) => {
-        if (!selectedUsers.some(u => u.id === user.id)) {
-            setSelectedUsers([...selectedUsers, user]);
-        }
-    };
-
-    const removeCreator = (userId) => {
-        setSelectedUsers(selectedUsers.filter(user => user.id !== userId));
-    };
-
+   
     const handleBannerChange = (e) => {
         setBanner(e.target.files[0]);
     };
@@ -61,13 +42,14 @@ const CreatePodcast = () => {
         formData.append('opis', description);
         formData.append('kategorija_id', categoryId);
         formData.append('baner', banner);
-        const creatorIds = selectedUsers.map(user => user.id);
-        formData.append('kreatori', JSON.stringify(creatorIds));
+      
+        
 
         try {
             const response = await axios.post('http://localhost:8000/api/podkasti', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
+                    'Authorization': "Bearer " + window.sessionStorage.getItem('auth_token'),
                 },
             });
             console.log('Podcast created:', response.data);

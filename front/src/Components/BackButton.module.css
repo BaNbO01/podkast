@@ -1,0 +1,20 @@
+/* BackButton.module.css */
+.backButton {
+    position: absolute; /* Pozicioniranje u odnosu na roditelja */
+    left: 20px; /* Leva margina za poravnanje na levu stranu */
+    background-color: #007bff; /* Plava boja */
+    width: auto;
+    color: white;
+    padding: 10px 20px; /* Ista veličina paddinga kao dugme Obriši */
+    font-size: 16px; /* Ista veličina fonta */
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 10px; /* Zaobljeni uglovi */
+    transition: background-color 0.3s ease; /* Efekat prelaza na hover */
+  }
+  
+  .backButton:hover {
+    background-color: #0056b3; /* Tamnija plava na hover */
+  }
+  
