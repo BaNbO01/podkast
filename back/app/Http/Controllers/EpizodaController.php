@@ -63,7 +63,7 @@ class EpizodaController extends Controller
 
         return Fajl::create([
             'naziv' => $filename,
-            'putanja' => str_replace('public/', 'storage/', $pathFile),
+            'putanja' =>  Storage::url($pathFile),
             'tip' => $file->getMimeType(),
         ]);
     }

@@ -107,7 +107,7 @@ class PodkastController extends Controller
         // Sprema sliku na specifičnu putanju
         $pathFile = $file->storeAs($path, $filename);
 
-        return str_replace('public/', 'storage/', $pathFile); // Vraća putanju do banera
+        return Storage::url($pathFile);
     }
 
 

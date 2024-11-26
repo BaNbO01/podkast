@@ -18,8 +18,6 @@ class FajlController extends Controller
             $fajl = Fajl::findOrFail($id);
             $relativePath = $fajl->putanja;
             $absolutePath = public_path($relativePath);
-            $absolutePath = str_replace('/', '\\', $absolutePath);
-    
             if (!File::exists($absolutePath)) {
                 return response()->json(['error' => 'Fajl ne postoji'], 404);
             }
