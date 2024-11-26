@@ -48,24 +48,32 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 // });
 
 Route::middleware('auth:sanctum')->group(function () {
+
+
 Route::get('/podkasti', [PodkastController::class, 'index']);
 Route::post('/podkasti', [PodkastController::class, 'store']);
 Route::get('/podkasti/{id}', [PodkastController::class, 'show']);
-Route::get('/epizode/{id}', [EpizodaController::class, 'show']);
-Route::get('/users/search', [UserController::class, 'search']);
-Route::get('/kategorije', [KategorijaController::class, 'index']);
+Route::delete('podkasti/{id}',[PodkastController::class, 'destroy']);
+
 Route::post('/epizode', [EpizodaController::class, 'store']);
+Route::get('/epizode/{id}', [EpizodaController::class, 'show']);
+Route::delete('/epizode/{id}', [EpizodaController::class, 'destroy']);
+
+
+Route::get('/kategorije', [KategorijaController::class, 'index']);
+Route::post('/kategorije', [KategorijaController::class, 'store']);
+
+
+
+Route::get('/users/search', [UserController::class, 'search']);
 Route::get('/users', [UserController::class, 'index']);
 Route::delete('/users/{userId}', [UserController::class, 'destroy']);
 Route::put('/users/{id}', [UserController::class, 'update']);
-Route::get('/kategorije', [KategorijaController::class, 'index']);
-Route::post('/kategorije', [KategorijaController::class, 'store']);
-Route::delete('/epizode/{id}', [EpizodaController::class, 'destroy']);
 Route::get('/users/podkasti',[UserController::class, 'mojiPodkasti']);
 Route::get('/users/favorites',[UserController::class, 'getFavorites']);
 Route::post('/users/favorites/{id}',[UserController::class, 'addToFavorites']);
 Route::delete('/users/favorites/remove/{id}', [UserController::class, 'removeFavorite']);
-Route::delete('podkasti/{id}',[PodkastController::class, 'destroy']);
+
 });     
 
 

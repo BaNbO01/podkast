@@ -49,6 +49,8 @@ class PodkastController extends Controller
     {
      
         try{
+
+            Log::info('Request Data:', $request->all());
             $request->validate([
                 'naziv' => 'required|string',
                 'opis' => 'required|string',
@@ -77,7 +79,7 @@ class PodkastController extends Controller
         }
         catch (\Exception $e) {
             return response()->json([
-                'message' => 'Greška prilikom ažuriranja aukcije',
+                'message' => 'Greška prilikom ažuriranja podkasta',
                 'error' => $e->getMessage()
             ], 500);
         }
