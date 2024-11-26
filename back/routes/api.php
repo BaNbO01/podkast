@@ -7,6 +7,7 @@ use App\Http\Controllers\EpizodaController;
 use App\Http\Controllers\PodkastController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\KategorijaController;
+use App\Http\Controllers\FajlController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -59,6 +60,7 @@ Route::post('/epizode', [EpizodaController::class, 'store']);
 Route::get('/epizode/{id}', [EpizodaController::class, 'show']);
 Route::delete('/epizode/{id}', [EpizodaController::class, 'destroy']);
 
+Route::get('/epizode/audio/{id}', [FajlController::class, 'audio'])->name('epizoda.audio');
 
 Route::get('/kategorije', [KategorijaController::class, 'index']);
 Route::post('/kategorije', [KategorijaController::class, 'store']);

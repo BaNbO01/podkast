@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from './CreatePodcast.module.css';
+import { useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
 
 const CreatePodcast = () => {
@@ -12,6 +13,7 @@ const CreatePodcast = () => {
     const [banner, setBanner] = useState(null);
     const [errors, setErrors] = useState({});
     const [userRole, setUserRole] = useState('kreator');
+    const navigate = useNavigate();
 
 
 
@@ -53,7 +55,8 @@ const CreatePodcast = () => {
                 },
             });
             console.log('Podcast created:', response.data);
-            alert("Podcast successfully created!");
+            alert("Uspesno kreiran podkast!");
+            navigate('/moji-podkasti')
             setErrors({});
         } catch (error) {
             console.error('Error saving podcast:', error);

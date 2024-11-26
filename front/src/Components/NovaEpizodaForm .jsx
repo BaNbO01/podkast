@@ -54,10 +54,10 @@ const NovaEpizodaForm = () => {
                 </div>
              
                 <div>
-                    <label>Fajl (audio/video):</label>
+                    <label>Fajl (audio):</label>
                     <input
                         type="file"
-                        accept=".mp4,.mp3"
+                        accept=".mp3"
                         onChange={(e) => setFile(e.target.files[0])}
                         required
                     />
