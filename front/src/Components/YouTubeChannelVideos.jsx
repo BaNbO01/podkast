@@ -8,16 +8,16 @@ const YouTubeChannelVideos = () => {
   const [videos, setVideos] = useState([]);
   const [userRole, setUserRole] = useState(sessionStorage.getItem('role') || null);
   const [channels, setChannels] = useState([
-    { id: 'UCY2VnIoHMA9fe6AhXVbI-zg', name: '6.75range' }, // ID za kanal 6.75range
-    { id: 'UCtcmRUuJVYYbyfi__I_JBnA', name: 'JaoMilepodcast' }, // ID za kanal JaoMilepodcast
-    { id: 'UC_36OBfYhV4s1Iw3nR7jADQ', name: 'XOsCHAT' }, // ID za kanal XOsCHAT
+    { id: process.env.REACT_APP_YOUTUBE_6_75, name: '6.75range' }, // ID za kanal 6.75range
+    { id: process.env.REACT_APP_YOUTUBE_JAO_MILE_PODKAST, name: 'JaoMilepodcast' }, // ID za kanal JaoMilepodcast
+    { id: process.env.REACT_APP_YOUTUBE_XO_S_CHAT, name: 'XOsCHAT' }, // ID za kanal XOsCHAT
   ]);
   const [loading, setLoading] = useState(false);
   const [nextPageToken, setNextPageToken] = useState('');
   const [prevPageToken, setPrevPageToken] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
-  const API_KEY = 'AIzaSyCKTz8L_wM1fuGOuSNRxQjqESFIcIV-b-0'; // Tvoj YouTube API ključ
+  const API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY; // Tvoj YouTube API ključ
   const VIDEOS_PER_PAGE = 5; // Broj video klipova po stranici
 
   const fetchVideos = async (channelId, pageToken = '') => {
