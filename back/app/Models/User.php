@@ -48,6 +48,11 @@ class User extends Authenticatable
 
     public function podkasti()
     {
-        return $this->belongsToMany(Podkast::class, 'korisnik_podkast');
+        return $this->hasMany(Podkast::class, 'kreator_id');
+    }
+
+    public function omiljeniPodkasti()
+    {
+        return $this->belongsToMany(Podkast::class, 'omiljeni_podkasti');
     }
 }

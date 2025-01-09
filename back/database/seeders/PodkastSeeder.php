@@ -10,11 +10,12 @@ class PodkastSeeder extends Seeder
 {
     public function run()
     {
-        $podkasti = Podkast::factory()->count(10)->create();
-
-        foreach ($podkasti as $podkast) {
-            $kreatori = User::where('role', 'kreator')->inRandomOrder()->take(2)->pluck('id');
-            $podkast->kreatori()->attach($kreatori);
-        }
+        Podkast::factory()->count(10)->create();
+        $users = User::all();
+        $users->each(function ($user) {
+            
+            $podkasti = Podkast::inRandomOrder()->take(3)->pluck('id');
+            $user->omiljeniPodkasti()->attach($podkasti);
+        });
     }
 }

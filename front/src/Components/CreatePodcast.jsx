@@ -1,41 +1,83 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios"; // Axios za API pozive
-import "./CreatePodcast.module.css";
-import Navigation from "./Navbar";
-import Navbar from "./Navbar";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import styles from './CreatePodcast.module.css';
+import Navbar from './Navbar';
 
-const Courses = () => {
-  const [categories, setCategories] = useState([]);
-  const [teachers, setTeachers] = useState([]);
-  const [courses, setCourses] = useState([]);
+const CreatePodcast = () => {
+    const [users, setUsers] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [selectedUsers, setSelectedUsers] = useState([]);
+    const [podcastName, setPodcastName] = useState('');
+    const [description, setDescription] = useState('');
+    const [categoryId, setCategoryId] = useState('');
+    const [categories, setCategories] = useState([]);
+    const [banner, setBanner] = useState(null);
+    const [errors, setErrors] = useState({});
+    const [userRole, setUserRole] = useState('kreator');
 
-  useEffect(() => {
-    // Učitavanje kategorija sa API-ja
-    axios
-      .get("http://localhost:8000/api/kategorije")
-      .then((response) => {
-        setCategories(response.data.data); // Postavljanje kategorija u stanje
-      })
-      .catch((error) => {
-        console.error("Error fetching categories:", error);
-      });
+    useEffect(() => {
+        if (searchTerm) {
+            axios.get(`http://localhost:8000/api/users/search?username=${searchTerm}`)
+                .then(response => {
+                    setUsers(response.data.data);
+                })
+                .catch(error => {
+                    console.error('Error fetching users:', error);
+                });
+        } else {
+            setUsers([]);
+        }
+    }, [searchTerm]);
 
-    // Mock podaci za nastavnike i kurseve
-    const mockTeachers = ["Prof. John Doe", "Prof. Jane Smith"];
-    const mockCourses = [
-      {
-        id: 1,
-        title: "React Basics",
-        description: "Learn the fundamentals of React.",
-        image: "https://via.placeholder.com/300",
-        created_at: "2024-01-01",
-        updated_at: "2024-01-10",
-      },
-    ];
+    useEffect(() => {
+        axios.get('http://localhost:8000/api/kategorije')
+            .then(response => {
+                setCategories(response.data.data);
+            })
+            .catch(error => {
+                console.error('Error fetching categories:', error);
+            });
+    }, []);
 
-    setTeachers(mockTeachers);
-    setCourses(mockCourses);
-  }, []);
+    const addCreator = (user) => {
+        if (!selectedUsers.some(u => u.id === user.id)) {
+            setSelectedUsers([...selectedUsers, user]);
+        }
+    };
+
+    const removeCreator = (userId) => {
+        setSelectedUsers(selectedUsers.filter(user => user.id !== userId));
+    };
+
+    const handleBannerChange = (e) => {
+        setBanner(e.target.files[0]);
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData();
+        formData.append('naziv', podcastName);
+        formData.append('opis', description);
+        formData.append('kategorija_id', categoryId);
+        formData.append('baner', banner);
+        const creatorIds = selectedUsers.map(user => user.id);
+        formData.append('kreatori', JSON.stringify(creatorIds));
+
+        try {
+            const response = await axios.post('http://localhost:8000/api/podkasti', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            console.log('Podcast created:', response.data);
+            alert("Podcast successfully created!");
+            setErrors({});
+        } catch (error) {
+            console.error('Error saving podcast:', error);
+            setErrors(error.response.data.errors);
+        }
+    };
 
   return (
     <div className="home-page">

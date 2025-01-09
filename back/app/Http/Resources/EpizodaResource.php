@@ -19,9 +19,10 @@ class EpizodaResource extends JsonResource
             'fajl' => [
                 'naziv' => $this->fajl->naziv,
                 'tip' => $tipFajla,
-                'streaming_url' => asset($fajlPutanja),  // URL za streaming
-                'download_url' => url($fajlPutanja),     // URL za preuzimanje
+                'streaming_url' => route('epizoda.audio', ['id' => $this->fajl->id]),
+                 
             ],
+            'kreator_epizode'=>new UserResource($this->podkast->kreator),
         ];
     }
 }

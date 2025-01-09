@@ -28,9 +28,10 @@ const Login = () => {
           // Čuvanje tokena i uloge u sessionStorage
           window.sessionStorage.setItem('auth_token', response.data.access_token);
           window.sessionStorage.setItem('role', response.data.role);
+          window.sessionStorage.setItem('user_id', response.data.data.id);
 
           // Navigacija nakon uspešne prijave
-          navigate('/podkasti', { state: { role: response.data.role } });
+          navigate('/podkasti');
         } else {
           setErrorMessage('Pogrešan email ili lozinka.');
         }

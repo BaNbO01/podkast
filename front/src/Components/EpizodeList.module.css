@@ -143,3 +143,27 @@
   background-color: darkred;
 }
 
+
+.createEpisodeButton {
+  position: absolute; /* Pozicioniranje relativno prema roditeljskom elementu */
+  bottom: 20px; /* Isto kao "Obriši Podcast" */
+  left: 20px; /* Na levoj strani prozora */
+  background-color: #007bff; /* Plava pozadina */
+  color: white; /* Bela boja teksta */
+  padding: 10px 20px; /* Isto odstojanje kao i "Obriši Podcast" */
+  font-size: 14px; /* Veličina fonta */
+  border: none; /* Bez ivica */
+  border-radius: 5px; /* Zaobljeni uglovi */
+  cursor: pointer; /* Kursor kao ruka */
+  width: auto; /* Dugme se prilagođava sadržaju */
+  display: inline-block; /* Sprečava zauzimanje cele širine */
+  z-index: 10; /* Sigurno preko drugih elemenata */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Suptilna senka */
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Animacija prilikom hover efekta */
+}
+
+.createEpisodeButton:hover {
+  background-color: #0056b3; /* Tamnija plava kada se pređe mišem */
+  transform: scale(1.05); /* Blago povećanje dugmeta */
+}
+

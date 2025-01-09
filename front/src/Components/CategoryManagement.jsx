@@ -8,17 +8,27 @@ const CategoryManagement = () => {
     const [newCategory, setNewCategory] = useState(''); // Nova kategorija koju unosimo
     const [errors, setErrors] = useState({}); // Greške pri unosu
     const [userRole, setUserRole] = useState('administrator');
+    const [successMessage, setSuccessMessage] = useState('');
+
 
     // Učitaj postojeće kategorije
     useEffect(() => {
-        axios.get('http://localhost:8000/api/kategorije')
-            .then(response => {
-                setCategories(response.data.data); // Postavi kategorije iz odgovora
-            })
-            .catch(error => {
-                console.error('Error fetching categories:', error);
+        const fetchCategories = async () => {
+          try {
+            const response = await axios.get('http://localhost:8000/api/kategorije', {
+              headers: {
+                'Authorization': 'Bearer ' + window.sessionStorage.getItem('auth_token'), // Slanje tokena
+              },
             });
-    }, []);
+    
+            setCategories(response.data.data); 
+          } catch (error) {
+            console.error('Error fetching categories:', error);
+          }
+        };
+    
+        fetchCategories();
+      }, []); 
 
     // Funkcija za dodavanje nove kategorije
     const handleAddCategory = async (e) => {
@@ -32,13 +42,26 @@ const CategoryManagement = () => {
         const categoryData = { naziv: newCategory };
 
         try {
-            const response = await axios.post('http://localhost:8000/api/kategorije', categoryData); // API za dodavanje nove kategorije
-            setCategories([...categories, response.data.data]); // Dodaj novu kategoriju u listu
+            const response = await axios.post('http://localhost:8000/api/kategorije', categoryData, {
+                headers: {
+                    'Authorization': 'Bearer ' + window.sessionStorage.getItem('auth_token'), 
+                }
+            }); 
+         
+            setCategories(prevCategories => [...prevCategories, response.data.data]); // Dodaj novu kategoriju u listu
             setNewCategory(''); // Očisti unos
             setErrors({}); // Očisti greške
+            setSuccessMessage('Kategorija uspešno dodata!'); // Postavi poruku o uspehu
+           
         } catch (error) {
-            console.error('Error adding category:', error);
-            setErrors({ category: 'Došlo je do greške pri dodavanju kategorije' });
+            if (error.response && error.response.status === 422) {
+                setErrors({ category: 'Naziv kategorije mora biti jedinstven' });
+            } else {
+                setErrors({ category: 'Došlo je do greške pri dodavanju kategorije' });
+            }
+           
+         
+            setSuccessMessage(''); // Očisti prethodnu poruku o uspehu
         }
     };
 
@@ -50,6 +73,8 @@ const CategoryManagement = () => {
 
                 {/* Prikazivanje grešaka ako postoje */}
                 {errors.category && <div style={{ color: 'red' }}>{errors.category}</div>}
+            {successMessage && <div style={{ color: 'green' }}>{successMessage}</div>}
+          
 
                 <form onSubmit={handleAddCategory}>
                     <div>

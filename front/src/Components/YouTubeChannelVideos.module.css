@@ -1,0 +1,138 @@
+.youtube-channel-videos {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.search-bar input {
+  padding: 8px;
+  margin-right: 10px;
+  width: 250px;
+}
+
+.search-bar button {
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.search-results {
+  margin-top: 20px;
+}
+
+.search-result-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.search-result-item img {
+  margin-right: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.channel-info {
+  margin-top: 20px;
+}
+
+.channel-info img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.video-list {
+  display: flex;
+  flex-direction: column;
+  gap: 30px; /* Veći razmak između video kartica */
+  margin-top: 20px;
+}
+
+.video-item {
+  margin-bottom: 30px; /* Povećano za još veći razmak između videa */
+  padding: 30px; /* Povećan padding za još veću karticu */
+  border: 1px solid #ccc;
+  border-radius: 15px; /* Povećani zaobljeni ivici za bolji vizualni efekt */
+  background-color: #f9f9f9;
+  width: 100%; /* Kartica se širi na celu širinu */
+  max-width: 1200px; /* Širina video kartica je sada veća (do 1200px) */
+  margin: 0 auto; /* Centriranje kartice na ekranu */
+}
+
+.video-item iframe {
+  width: 100%; /* Širina iframe-a na 100% širine roditeljskog elementa */
+  height: 800px; /* Povećana visina iframe-a za veći video prikaz */
+  border-radius: 15px; /* Zaobljeni ivici za iframe */
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination-button {
+  padding: 10px 20px;
+  cursor: pointer;
+  margin: 0 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.pagination-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.page-number {
+  font-size: 16px;
+  margin: 0 10px;
+}
+
+.video-player {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.channel-list {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.channel-card {
+  width: 250px; /* Širina kartice kanala */
+  padding: 20px;
+  border: 1px solid #ccc;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.channel-card:hover {
+  background-color: #f0f0f0;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.pagination-button {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.page-number {
+  font-size: 16px;
+}
