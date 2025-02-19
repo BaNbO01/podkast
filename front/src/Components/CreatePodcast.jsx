@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from './CreatePodcast.module.css';
-import { useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
 
 const CreatePodcast = () => {
-
+    const [users, setUsers] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [selectedUsers, setSelectedUsers] = useState([]);
     const [podcastName, setPodcastName] = useState('');
     const [description, setDescription] = useState('');
     const [categoryId, setCategoryId] = useState('');
@@ -13,16 +14,23 @@ const CreatePodcast = () => {
     const [banner, setBanner] = useState(null);
     const [errors, setErrors] = useState({});
     const [userRole, setUserRole] = useState('kreator');
-    const navigate = useNavigate();
-
-
 
     useEffect(() => {
-        axios.get('http://localhost:8000/api/kategorije',{
-            headers: {
-                'Authorization': "Bearer " + window.sessionStorage.getItem('auth_token'),
-            },
-        })
+        if (searchTerm) {
+            axios.get(`http://localhost:8000/api/users/search?username=${searchTerm}`)
+                .then(response => {
+                    setUsers(response.data.data);
+                })
+                .catch(error => {
+                    console.error('Error fetching users:', error);
+                });
+        } else {
+            setUsers([]);
+        }
+    }, [searchTerm]);
+
+    useEffect(() => {
+        axios.get('http://localhost:8000/api/kategorije')
             .then(response => {
                 setCategories(response.data.data);
             })
@@ -31,7 +39,16 @@ const CreatePodcast = () => {
             });
     }, []);
 
-   
+    const addCreator = (user) => {
+        if (!selectedUsers.some(u => u.id === user.id)) {
+            setSelectedUsers([...selectedUsers, user]);
+        }
+    };
+
+    const removeCreator = (userId) => {
+        setSelectedUsers(selectedUsers.filter(user => user.id !== userId));
+    };
+
     const handleBannerChange = (e) => {
         setBanner(e.target.files[0]);
     };
@@ -44,19 +61,17 @@ const CreatePodcast = () => {
         formData.append('opis', description);
         formData.append('kategorija_id', categoryId);
         formData.append('baner', banner);
-      
-        
+        const creatorIds = selectedUsers.map(user => user.id);
+        formData.append('kreatori', JSON.stringify(creatorIds));
 
         try {
             const response = await axios.post('http://localhost:8000/api/podkasti', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                    'Authorization': "Bearer " + window.sessionStorage.getItem('auth_token'),
                 },
             });
             console.log('Podcast created:', response.data);
-            alert("Uspesno kreiran podkast!");
-            navigate('/moji-podkasti')
+            alert("Podcast successfully created!");
             setErrors({});
         } catch (error) {
             console.error('Error saving podcast:', error);
@@ -64,81 +79,53 @@ const CreatePodcast = () => {
         }
     };
 
-    return (
-        <div>
-             <Navbar userRole={userRole} />
-        
-        <div className="create-podcast-form">
-            <h2>Kreiraj Podkast</h2>
-
-            {errors && Object.keys(errors).length > 0 && (
-                <div className="error-dialog">
-                    <h3>Validation Errors</h3>
-                    <ul>
-                        {Object.entries(errors).map(([field, messages]) =>
-                            messages.map((message, index) => (
-                                <li key={`${field}-${index}`}>{message}</li>
-                            ))
-                        )}
-                    </ul>
-                </div>
-            )}
-
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label htmlFor="podcast-name">Naziv Podkasta</label>
-                    <input
-                        id="podcast-name"
-                        type="text"
-                        value={podcastName}
-                        onChange={(e) => setPodcastName(e.target.value)}
-                        required
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="description">Opis</label>
-                    <textarea
-                        id="description"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        required
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="category">Kategorija</label>
-                    <select
-                        id="category"
-                        value={categoryId}
-                        onChange={(e) => setCategoryId(e.target.value)}
-                        required
-                    >
-                        <option value="">Odaberi Kategoriju</option>
-                        {categories.map(category => (
-                            <option key={category.id} value={category.id}>
-                                {category.naziv}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="banner">Postavi Baner</label>
-                    <input
-                        id="banner"
-                        type="file"
-                        onChange={handleBannerChange}
-                        accept="image/*"
-                        required
-                    />
-                </div>
-
-                <button type="submit">Kreiraj Podkast</button>
-            </form>
+  return (
+    <div className="home-page">
+      <Navigation />
+      <div className="main-content">
+        {/* Sidebar */}
+        <div className="sidebar">
+          <h3>Filteri</h3>
+          <h4>Kategorije</h4>
+          <ul>
+            {categories.map((category) => (
+              <li key={category.id}>{category.naziv}</li> // Kategorije prikazane kao lista
+            ))}
+          </ul>
+          <h4>Nastavnici</h4>
+          <ul>
+            {teachers.map((teacher, index) => (
+              <li key={index}>{teacher}</li>
+            ))}
+          </ul>
+          <button className="reset-button">Resetuj filtere</button>
         </div>
+
+        {/* Courses */}
+        <div className="courses-section">
+          <h2>Svi kursevi</h2>
+          <div className="courses-grid">
+            {courses.map((course) => (
+              <div key={course.id} className="course-card">
+                <img
+                  src={course.image}
+                  alt={course.title}
+                  className="course-image"
+                />
+                <div className="course-info">
+                  <h3>{course.title}</h3>
+                  <p>{course.description}</p>
+                  <p className="course-dates">
+                    Kreirano: {course.created_at} | Ažurirano: {course.updated_at}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
-export default CreatePodcast;
+export default Courses;
