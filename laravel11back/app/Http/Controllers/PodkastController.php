@@ -50,6 +50,15 @@ class PodkastController extends Controller
      
         try{
 
+
+            $user = Auth::user();
+            if($user->role!='kreator'){
+                return response()->json([
+                    'error' => 'Nemate dozvolu za prikaz porudzbina.',
+                ], 403); 
+            }
+            
+
             Log::info('Request Data:', $request->all());
             $request->validate([
                 'naziv' => 'required|string',
@@ -60,7 +69,7 @@ class PodkastController extends Controller
                 
             ]);
     
-            $user = Auth::user();
+          
     
             $podkast = Podkast::create([
                 'naziv' => $request->naziv,
@@ -97,7 +106,7 @@ class PodkastController extends Controller
         $filename = $sanitizedNaziv . '.' . $extension;
 
         // Putanja gde će se sačuvati slika
-        $path = 'public/app/' . $sanitizedNaziv;
+        $path = 'app/' . $sanitizedNaziv;
 
         // Proverava da li direktorijum postoji, ako ne, pravi ga
         if (!Storage::exists($path)) {
@@ -105,7 +114,7 @@ class PodkastController extends Controller
         }
 
         // Sprema sliku na specifičnu putanju
-        $pathFile = $file->storeAs($path, $filename);
+        $pathFile = $file->storeAs($path, $filename,"public");
 
         return Storage::url($pathFile);
     }
@@ -116,9 +125,9 @@ class PodkastController extends Controller
     public function destroy($id)
 {
     try {
-        // Pronađi podkast
         $podkast = Podkast::findOrFail($id);
-
+        $user = Auth::user();
+        if($user->role=='administrator' || $user->id==$podkast->kreator->id){
         // Pronađi baner podkasta i obriši fajl
         if ($podkast->putanja_do_banera) {
             $putanjaBanera = public_path($podkast->putanja_do_banera);
@@ -157,6 +166,12 @@ class PodkastController extends Controller
         $podkast->delete();
 
         return response()->json(['message' => 'Podkast i sve njegove epizode su uspešno obrisani.'], 200);
+    }
+        else{
+            return response()->json([
+                'error' => 'Nemate dozvolu za brisanje podkasta.',
+            ], 403); 
+        }
     } catch (\Exception $e) {
         Log::error('Greška prilikom brisanja podkasta: ' . $e->getMessage());
         return response()->json(['message' => 'Došlo je do greške prilikom brisanja podkasta.'], 500);

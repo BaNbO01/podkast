@@ -18,6 +18,13 @@ class KategorijaController extends Controller
 
     public function store(Request $request)
     {
+
+        if($user->role!='administrator'){
+            return response()->json([
+                'error' => 'Nemate dozvolu za dodavanje kategorije.',
+            ], 403); 
+        }
+        
         
         $validated = $request->validate([
             'naziv' => 'required|string|max:255|unique:kategorije,naziv',
