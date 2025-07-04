@@ -8,9 +8,9 @@ const YouTubeChannelVideos = () => {
   const [videos, setVideos] = useState([]);
   const [userRole, setUserRole] = useState(sessionStorage.getItem('role') || null);
   const [channels, setChannels] = useState([
-    { id: process.env.REACT_APP_YOUTUBE_6_75, name: '6.75range' }, // ID za kanal 6.75range
-    { id: process.env.REACT_APP_YOUTUBE_JAO_MILE_PODKAST, name: 'JaoMilepodcast' }, // ID za kanal JaoMilepodcast
-    { id: process.env.REACT_APP_YOUTUBE_XO_S_CHAT, name: 'XOsCHAT' }, // ID za kanal XOsCHAT
+    { id: process.env.REACT_APP_YOUTUBE_TAMPON_ZONA, name: 'tampon_zona' }, // ID za kanal 6.75range
+    { id: process.env.REACT_APP_YOUTUBE_ZDRAVA_PRICA, name: 'zdrava_prica' }, // ID za kanal JaoMilepodcast
+    { id: process.env.REACT_APP_YOUTUBE_ODABRANA_PRICA, name: 'odabrana_prica' }, // ID za kanal XOsCHAT
   ]);
   const [loading, setLoading] = useState(false);
   const [nextPageToken, setNextPageToken] = useState('');
