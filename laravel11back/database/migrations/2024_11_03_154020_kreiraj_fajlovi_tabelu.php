@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('fajlovi', function (Blueprint $table) {
             $table->id();
             $table->string('naziv');
-            $table->string('putanja');
             $table->string('tip');
             $table->timestamps();
         });

@@ -10,6 +10,7 @@ use App\Models\Podkast;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\EpizodaResource;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Auth;
 
 class EpizodaController extends Controller
 {

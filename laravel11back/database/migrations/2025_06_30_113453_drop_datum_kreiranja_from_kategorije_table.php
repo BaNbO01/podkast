@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kategorije', function (Blueprint $table) {
-            $table->id();
-            $table->string('tip')->unique();
-            $table->date('datum_kreiranja');
-            $table->timestamps();
+        Schema::table('kategorije', function (Blueprint $table) {
+          $table->dropColumn('datum_kreiranja');
+
         });
-        
     }
 
     /**
@@ -25,6 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kategorije');
+        Schema::table('kategorije', function (Blueprint $table) {
+            $table->date('datum_kreiranja');
+        });
     }
 };

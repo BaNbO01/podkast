@@ -93,7 +93,7 @@ class PodkastController extends Controller
             ], 500);
         }
         
-        // Validacija podataka
+        
        
     }
 

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Kategorija;
 use App\Http\Resources\KategorijaResource;
+use Illuminate\Support\Facades\Auth;
+
 
 class KategorijaController extends Controller
 {
@@ -18,6 +20,8 @@ class KategorijaController extends Controller
 
     public function store(Request $request)
     {
+
+        $user = Auth::user();
 
         if($user->role!='administrator'){
             return response()->json([

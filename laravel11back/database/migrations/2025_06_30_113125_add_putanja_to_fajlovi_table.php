@@ -11,13 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kategorije', function (Blueprint $table) {
-            $table->id();
-            $table->string('tip')->unique();
-            $table->date('datum_kreiranja');
-            $table->timestamps();
+        Schema::table('fajlovi', function (Blueprint $table) {
+               $table->string('putanja')->after('naziv');
         });
-        
     }
 
     /**
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kategorije');
+        Schema::table('fajlovi', function (Blueprint $table) {
+             $table->dropColumn('putanja');
+        });
     }
 };

@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('podkast_id')->constrained('podkasti')->onDelete('cascade');
             $table->string('naziv');
             $table->dateTime('datum_i_vreme_odrzavanja');
-            $table->foreignId('fajl_id')->nullable()->constrained('fajlovi')->onDelete('cascade');
             $table->timestamps();
          
         });
